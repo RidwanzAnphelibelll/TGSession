@@ -1,0 +1,1101 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="description" content="TG Session Generator — Generate Telegram String Session untuk userbot pribadi dengan mudah dan aman. Data hanya tersimpan di browser kamu.">
+    <title>TG Session Generator</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg:         #0d0d0f;
+            --bg2:        #121214;
+            --surface:    #18181c;
+            --surface2:   #1e1e24;
+            --border:     #26262e;
+            --border2:    #32323c;
+            --text:       #ededf0;
+            --text2:      #8888a0;
+            --muted:      #50505e;
+            --blue:       #4f8ef7;
+            --blue2:      #3b7af0;
+            --blue-dim:   rgba(79,142,247,0.08);
+            --blue-glow:  rgba(79,142,247,0.18);
+            --green:      #34d473;
+            --green-dim:  rgba(52,212,115,0.08);
+            --red:        #f05252;
+            --red-dim:    rgba(240,82,82,0.08);
+            --mono:       'JetBrains Mono', monospace;
+            --sans:       'Inter', sans-serif;
+            --r:          10px;
+            --rl:         14px;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family:    var(--sans);
+            background:     var(--bg);
+            color:          var(--text);
+            min-height:     100vh;
+            display:        flex;
+            flex-direction: column;
+            font-size:      14px;
+            line-height:    1.5;
+        }
+
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 99px; }
+
+        .nav {
+            height:        52px;
+            display:       flex;
+            align-items:   center;
+            padding:       0 20px;
+            border-bottom: 1px solid var(--border);
+            background:    var(--bg2);
+            position:      sticky;
+            top:           0;
+            z-index:       50;
+            gap:           10px;
+        }
+
+        .nav-mark {
+            width:           30px;
+            height:          30px;
+            background:      var(--blue);
+            border-radius:   8px;
+            display:         flex;
+            align-items:     center;
+            justify-content: center;
+            flex-shrink:     0;
+        }
+
+        .nav-mark svg { width: 15px; height: 15px; fill: #fff; }
+
+        .nav-title {
+            font-size:      13px;
+            font-weight:    600;
+            letter-spacing: -0.01em;
+            flex:           1;
+        }
+
+        .nav-title span { color: var(--blue); }
+
+        .nav-tag {
+            font-family:    var(--mono);
+            font-size:      10px;
+            font-weight:    600;
+            background:     var(--blue-dim);
+            color:          var(--blue);
+            border:         1px solid rgba(79,142,247,0.2);
+            padding:        3px 8px;
+            border-radius:  99px;
+        }
+
+        .nav-gh {
+            display:         flex;
+            align-items:     center;
+            gap:             5px;
+            font-size:       11px;
+            font-weight:     600;
+            color:           var(--text2);
+            text-decoration: none;
+            padding:         5px 9px;
+            border:          1px solid var(--border2);
+            border-radius:   6px;
+            transition:      all 0.15s;
+            font-family:     var(--sans);
+            flex-shrink:     0;
+        }
+
+        .nav-gh svg { width: 13px; height: 13px; fill: currentColor; }
+
+        .nav-gh:hover {
+            color:        var(--text);
+            border-color: var(--blue);
+            background:   var(--blue-dim);
+        }
+
+        .wrap {
+            max-width: 460px;
+            margin:    0 auto;
+            padding:   28px 16px 60px;
+            width:     100%;
+            flex:      1;
+        }
+
+        .page-top {
+            text-align:    center;
+            margin-bottom: 24px;
+        }
+
+        .page-top-ico {
+            width:           44px;
+            height:          44px;
+            background:      var(--surface2);
+            border:          1px solid var(--border2);
+            border-radius:   12px;
+            display:         flex;
+            align-items:     center;
+            justify-content: center;
+            margin:          0 auto 14px;
+        }
+
+        .page-top-ico svg { width: 20px; height: 20px; fill: var(--blue); }
+
+        .page-top h1 {
+            font-size:      19px;
+            font-weight:    700;
+            letter-spacing: -0.03em;
+            margin-bottom:  5px;
+        }
+
+        .page-top p {
+            font-size:   12.5px;
+            color:       var(--text2);
+            line-height: 1.65;
+            max-width:   320px;
+            margin:      0 auto;
+        }
+
+        .prog {
+            display:         flex;
+            align-items:     center;
+            justify-content: center;
+            margin-top:      18px;
+            gap:             0;
+        }
+
+        .ps {
+            display:     flex;
+            align-items: center;
+            gap:         5px;
+            font-size:   11px;
+            color:       var(--muted);
+            font-family: var(--mono);
+        }
+
+        .ps.on  { color: var(--blue); }
+        .ps.ok  { color: var(--green); }
+
+        .pd {
+            width:           18px;
+            height:          18px;
+            border-radius:   50%;
+            border:          1.5px solid currentColor;
+            display:         flex;
+            align-items:     center;
+            justify-content: center;
+            font-size:       9px;
+            font-weight:     700;
+            flex-shrink:     0;
+            transition:      all 0.25s;
+        }
+
+        .ps.ok .pd {
+            background:   var(--green);
+            border-color: var(--green);
+            color:        #000;
+        }
+
+        .pl {
+            width:      22px;
+            height:     1px;
+            background: var(--border2);
+            margin:     0 4px;
+        }
+
+        .panel { display: none; animation: up 0.25s ease; }
+        .panel.on { display: block; }
+
+        @keyframes up { from { opacity:0; transform:translateY(6px); } to { opacity:1; transform:translateY(0); } }
+
+        .box {
+            background:    var(--bg2);
+            border:        1px solid var(--border);
+            border-radius: var(--rl);
+            overflow:      hidden;
+            margin-bottom: 10px;
+        }
+
+        .box-top {
+            padding:       10px 14px;
+            border-bottom: 1px solid var(--border);
+            display:       flex;
+            align-items:   center;
+            gap:           8px;
+        }
+
+        .box-top-ico {
+            width:           25px;
+            height:          25px;
+            background:      var(--surface2);
+            border:          1px solid var(--border2);
+            border-radius:   6px;
+            display:         flex;
+            align-items:     center;
+            justify-content: center;
+            flex-shrink:     0;
+        }
+
+        .box-top-ico svg { width: 11px; height: 11px; fill: var(--text2); }
+
+        .box-top-lbl {
+            font-size:   12.5px;
+            font-weight: 600;
+        }
+
+        .box-body { padding: 14px; }
+
+        .r2 {
+            display:               grid;
+            grid-template-columns: 1fr 1fr;
+            gap:                   10px;
+        }
+
+        .f { margin-bottom: 10px; }
+        .f:last-of-type { margin-bottom: 0; }
+
+        .f label {
+            display:        block;
+            font-size:      10.5px;
+            font-weight:    600;
+            color:          var(--text2);
+            margin-bottom:  5px;
+            letter-spacing: 0.03em;
+            text-transform: uppercase;
+        }
+
+        .ib { position: relative; }
+
+        .ib input {
+            width:         100%;
+            padding:       8px 11px;
+            background:    var(--surface);
+            border:        1px solid var(--border2);
+            color:         var(--text);
+            border-radius: var(--r);
+            font-family:   var(--mono);
+            font-size:     12px;
+            outline:       none;
+            transition:    border-color 0.15s, box-shadow 0.15s;
+        }
+
+        .ib input::placeholder { color: var(--muted); }
+
+        .ib input:focus {
+            border-color: var(--blue);
+            box-shadow:   0 0 0 3px var(--blue-dim);
+        }
+
+        .fhint {
+            margin-top:  4px;
+            font-size:   10.5px;
+            color:       var(--muted);
+            display:     flex;
+            align-items: flex-start;
+            gap:         4px;
+            line-height: 1.5;
+        }
+
+        .fhint svg { width: 10px; height: 10px; fill: currentColor; flex-shrink:0; margin-top:1px; }
+        .fhint a   { color: var(--blue); text-decoration: none; }
+        .fhint a:hover { text-decoration: underline; }
+
+        .note {
+            border-radius: var(--r);
+            padding:       9px 11px;
+            font-size:     12px;
+            display:       flex;
+            align-items:   flex-start;
+            gap:           7px;
+            line-height:   1.5;
+            margin-bottom: 10px;
+        }
+
+        .note svg  { width: 12px; height: 12px; fill: currentColor; flex-shrink:0; margin-top:1px; }
+        .note.blue { background: var(--blue-dim);  border: 1px solid rgba(79,142,247,0.18);  color: #93b8fd; }
+        .note.red  { background: var(--red-dim);   border: 1px solid rgba(240,82,82,0.18);   color: #fca5a5; }
+        .note.hide { display: none; }
+
+        .btn {
+            width:           100%;
+            padding:         9px 14px;
+            border:          none;
+            border-radius:   var(--r);
+            font-family:     var(--sans);
+            font-size:       13px;
+            font-weight:     600;
+            cursor:          pointer;
+            display:         flex;
+            align-items:     center;
+            justify-content: center;
+            gap:             6px;
+            transition:      all 0.15s;
+            line-height:     1;
+            margin-top:      10px;
+        }
+
+        .btn svg { width: 13px; height: 13px; fill: currentColor; flex-shrink:0; }
+
+        .btn-blue {
+            background: var(--blue);
+            color:      #fff;
+        }
+
+        .btn-blue:hover:not(:disabled) {
+            background: var(--blue2);
+            transform:  translateY(-1px);
+            box-shadow: 0 4px 14px var(--blue-glow);
+        }
+
+        .btn-blue:disabled { opacity: 0.4; cursor: not-allowed; transform: none; box-shadow: none; }
+
+        .btn-ghost {
+            background: transparent;
+            color:      var(--text2);
+            border:     1px solid var(--border2);
+        }
+
+        .btn-ghost:hover { background: var(--surface); color: var(--text); }
+
+        .spin {
+            width:             13px;
+            height:            13px;
+            border:            2px solid rgba(255,255,255,0.2);
+            border-left-color: #fff;
+            border-radius:     50%;
+            animation:         rot 0.6s linear infinite;
+            flex-shrink:       0;
+        }
+
+        @keyframes rot { to { transform: rotate(360deg); } }
+
+        .res-box {
+            background:    var(--bg2);
+            border:        1px solid rgba(52,212,115,0.25);
+            border-radius: var(--rl);
+            overflow:      hidden;
+            margin-bottom: 10px;
+        }
+
+        .res-top {
+            padding:       10px 14px;
+            border-bottom: 1px solid rgba(52,212,115,0.12);
+            display:       flex;
+            align-items:   center;
+            gap:           8px;
+            background:    rgba(52,212,115,0.04);
+        }
+
+        .res-top-ico {
+            width:           24px;
+            height:          24px;
+            background:      var(--green-dim);
+            border-radius:   6px;
+            display:         flex;
+            align-items:     center;
+            justify-content: center;
+        }
+
+        .res-top-ico svg { width: 11px; height: 11px; fill: var(--green); }
+
+        .res-top-lbl {
+            font-size:   12.5px;
+            font-weight: 600;
+            color:       var(--green);
+            flex:        1;
+        }
+
+        .res-top-meta {
+            font-family: var(--mono);
+            font-size:   10px;
+            color:       var(--muted);
+        }
+
+        .res-body { padding: 14px; }
+
+        .res-info {
+            background:    var(--surface);
+            border:        1px solid var(--border2);
+            border-radius: var(--r);
+            padding:       10px 12px;
+            margin-bottom: 10px;
+        }
+
+        .res-row {
+            display:     flex;
+            align-items: center;
+            gap:         8px;
+            font-size:   12px;
+        }
+
+        .res-row + .res-row {
+            margin-top:  6px;
+            padding-top: 6px;
+            border-top:  1px solid var(--border);
+        }
+
+        .res-row-lbl {
+            font-size:   10px;
+            color:       var(--muted);
+            font-family: var(--mono);
+            width:       52px;
+            flex-shrink: 0;
+        }
+
+        .res-row-val {
+            font-family: var(--mono);
+            font-size:   11px;
+            color:       var(--text);
+            font-weight: 600;
+        }
+
+        .ses-out {
+            background:    var(--surface);
+            border:        1px solid var(--border2);
+            border-radius: var(--r);
+            padding:       10px 12px;
+            font-family:   var(--mono);
+            font-size:     10.5px;
+            color:         var(--text2);
+            word-break:    break-all;
+            line-height:   1.7;
+            max-height:    90px;
+            overflow-y:    auto;
+            margin-bottom: 10px;
+        }
+
+        .btn-pair {
+            display:               grid;
+            grid-template-columns: 1fr 1fr;
+            gap:                   7px;
+        }
+
+        .bsm {
+            padding:         7px 10px;
+            border-radius:   var(--r);
+            font-family:     var(--sans);
+            font-size:       12px;
+            font-weight:     600;
+            cursor:          pointer;
+            display:         flex;
+            align-items:     center;
+            justify-content: center;
+            gap:             5px;
+            transition:      all 0.15s;
+            border:          none;
+            line-height:     1;
+        }
+
+        .bsm svg { width: 11px; height: 11px; fill: currentColor; flex-shrink:0; }
+
+        .bsm-blue  { background: var(--blue-dim);  border: 1px solid rgba(79,142,247,0.2);  color: var(--blue);  }
+        .bsm-green { background: var(--green-dim); border: 1px solid rgba(52,212,115,0.2); color: var(--green); }
+
+        .bsm-blue:hover  { background: var(--blue);  color: #fff; }
+        .bsm-green:hover { background: var(--green); color: #000; }
+
+        .hist-hdr {
+            display:         flex;
+            align-items:     center;
+            justify-content: space-between;
+            margin-bottom:   8px;
+        }
+
+        .hist-lbl {
+            font-size:      10px;
+            font-weight:    700;
+            color:          var(--muted);
+            text-transform: uppercase;
+            letter-spacing: 0.07em;
+            font-family:    var(--mono);
+        }
+
+        .btn-clr {
+            background:  none;
+            border:      none;
+            color:       var(--muted);
+            font-size:   11px;
+            cursor:      pointer;
+            font-family: var(--sans);
+            display:     flex;
+            align-items: center;
+            gap:         4px;
+            transition:  color 0.15s;
+            padding:     0;
+        }
+
+        .btn-clr svg   { width: 10px; height: 10px; fill: currentColor; }
+        .btn-clr:hover { color: var(--red); }
+
+        .hist-list { display: flex; flex-direction: column; gap: 6px; }
+
+        .hist-empty {
+            text-align:  center;
+            padding:     18px;
+            color:       var(--muted);
+            font-size:   11.5px;
+            font-family: var(--mono);
+        }
+
+        .hist-empty svg { width:18px; height:18px; fill:var(--border2); display:block; margin:0 auto 6px; }
+
+        .hi {
+            background:    var(--surface);
+            border:        1px solid var(--border);
+            border-radius: var(--r);
+            padding:       10px 12px;
+            transition:    border-color 0.15s;
+        }
+
+        .hi:hover { border-color: var(--border2); }
+
+        .hi-r1 {
+            display:         flex;
+            align-items:     center;
+            justify-content: space-between;
+            gap:             8px;
+            margin-bottom:   3px;
+        }
+
+        .hi-phone {
+            font-size:   12px;
+            font-weight: 600;
+            display:     flex;
+            align-items: center;
+            gap:         5px;
+        }
+
+        .hi-phone svg { width:10px; height:10px; fill:var(--blue); }
+
+        .hi-date {
+            font-family: var(--mono);
+            font-size:   9.5px;
+            color:       var(--muted);
+            white-space: nowrap;
+        }
+
+        .hi-prev {
+            font-family:   var(--mono);
+            font-size:     9.5px;
+            color:         var(--muted);
+            overflow:      hidden;
+            text-overflow: ellipsis;
+            white-space:   nowrap;
+            margin-bottom: 7px;
+        }
+
+        .hi-acts { display: flex; gap: 4px; }
+
+        .hb {
+            padding:       3px 8px;
+            border-radius: 5px;
+            font-size:     10px;
+            font-weight:   600;
+            cursor:        pointer;
+            font-family:   var(--sans);
+            transition:    all 0.15s;
+            border:        none;
+            display:       flex;
+            align-items:   center;
+            gap:           3px;
+            line-height:   1.6;
+        }
+
+        .hb svg { width:9px; height:9px; fill:currentColor; }
+
+        .hb-c { background:var(--blue-dim);  color:var(--blue);  border:1px solid rgba(79,142,247,0.2); }
+        .hb-d { background:var(--green-dim); color:var(--green); border:1px solid rgba(52,212,115,0.2); }
+        .hb-x { background:var(--red-dim);   color:var(--red);   border:1px solid rgba(240,82,82,0.2);  }
+
+        .hb-c:hover { background:var(--blue);  color:#fff; }
+        .hb-d:hover { background:var(--green); color:#000; }
+        .hb-x:hover { background:var(--red);   color:#fff; }
+
+        .toast {
+            position:       fixed;
+            bottom:         18px;
+            right:          18px;
+            background:     var(--surface2);
+            border:         1px solid var(--border2);
+            border-radius:  var(--r);
+            padding:        9px 13px;
+            font-size:      12px;
+            display:        flex;
+            align-items:    center;
+            gap:            6px;
+            box-shadow:     0 8px 24px rgba(0,0,0,0.45);
+            transform:      translateY(50px);
+            opacity:        0;
+            transition:     all 0.22s;
+            z-index:        999;
+            pointer-events: none;
+            max-width:      250px;
+        }
+
+        .toast.on { transform:translateY(0); opacity:1; }
+        .toast svg { width:12px; height:12px; fill:currentColor; flex-shrink:0; }
+        .toast.ok  { color:var(--green); }
+        .toast.err { color:var(--red); }
+        .toast .tt { color:var(--text); font-size:12px; }
+
+        .foot {
+            border-top:  1px solid var(--border);
+            background:  var(--bg2);
+            padding:     12px 20px;
+            text-align:  center;
+            font-size:   10.5px;
+            color:       var(--muted);
+            font-family: var(--mono);
+        }
+
+        .foot a { color:var(--blue); text-decoration:none; }
+        .foot a:hover { text-decoration:underline; }
+
+        @media (max-width:480px) {
+            .wrap     { padding:18px 12px 44px; }
+            .r2       { grid-template-columns:1fr; }
+            .btn-pair { grid-template-columns:1fr; }
+            .nav-tag  { display:none; }
+        }
+    </style>
+</head>
+<body>
+
+<nav class="nav">
+    <div class="nav-mark">
+        <svg viewBox="0 0 24 24"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.248l-2.04 9.613c-.15.673-.543.838-1.097.521l-3.04-2.24-1.468 1.412c-.162.162-.298.298-.612.298l.218-3.094 5.63-5.087c.245-.218-.053-.338-.38-.12L7.565 14.63l-2.99-.934c-.65-.203-.663-.65.136-.961l11.67-4.502c.54-.198 1.014.12.781.015z"/></svg>
+    </div>
+    <div class="nav-title">TG<span>Session</span></div>
+    <div class="nav-tag">Generator</div>
+    <a class="nav-gh" href="https://github.com/RidwanzAnphelibelll/TGSession" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+        GitHub
+    </a>
+</nav>
+
+<div class="wrap">
+
+    <div class="page-top">
+        <div class="page-top-ico">
+            <svg viewBox="0 0 24 24"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.248l-2.04 9.613c-.15.673-.543.838-1.097.521l-3.04-2.24-1.468 1.412c-.162.162-.298.298-.612.298l.218-3.094 5.63-5.087c.245-.218-.053-.338-.38-.12L7.565 14.63l-2.99-.934c-.65-.203-.663-.65.136-.961l11.67-4.502c.54-.198 1.014.12.781.015z"/></svg>
+        </div>
+        <h1>Session Generator</h1>
+        <p>Generate Telegram String Session untuk userbot pribadi. Data hanya tersimpan di browser kamu.</p>
+        <div class="prog" id="prog">
+            <div class="ps on" id="s1"><div class="pd">1</div><span>Kredensial</span></div>
+            <div class="pl"></div>
+            <div class="ps" id="s2"><div class="pd">2</div><span>OTP</span></div>
+            <div class="pl"></div>
+            <div class="ps" id="s3"><div class="pd">3</div><span>Selesai</span></div>
+        </div>
+    </div>
+
+    <div class="panel on" id="pCred">
+        <div class="box">
+            <div class="box-top">
+                <div class="box-top-ico">
+                    <svg viewBox="0 0 24 24"><path d="M12.65 10C11.83 7.67 9.61 6 7 6c-3.31 0-6 2.69-6 6s2.69 6 6 6c2.61 0 4.83-1.67 5.65-4H17v4h4v-4h2v-4H12.65zM7 14c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2z"/></svg>
+                </div>
+                <div class="box-top-lbl">Kredensial API</div>
+            </div>
+            <div class="box-body">
+                <div class="r2">
+                    <div class="f">
+                        <label>API ID</label>
+                        <div class="ib"><input type="text" id="apiId" placeholder="12345678" autocomplete="off" spellcheck="false"></div>
+                    </div>
+                    <div class="f">
+                        <label>API Hash</label>
+                        <div class="ib"><input type="text" id="apiHash" placeholder="a1b2c3..." autocomplete="off" spellcheck="false"></div>
+                    </div>
+                </div>
+                <div class="f">
+                    <label>Nomor HP</label>
+                    <div class="ib"><input type="tel" id="phone" placeholder="+628123456789" autocomplete="tel"></div>
+                    <div class="fhint">
+                        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+                        Dapatkan API ID &amp; Hash di <a href="https://my.telegram.org/apps" target="_blank" rel="noopener">my.telegram.org/apps</a>
+                    </div>
+                </div>
+                <div class="note red hide" id="errCred">
+                    <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+                    <span id="errCredMsg"></span>
+                </div>
+                <button class="btn btn-blue" id="btnSend">
+                    <svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+                    Kirim Kode OTP
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="panel" id="pOtp">
+        <div class="box">
+            <div class="box-top">
+                <div class="box-top-ico">
+                    <svg viewBox="0 0 24 24"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg>
+                </div>
+                <div class="box-top-lbl">Verifikasi OTP</div>
+            </div>
+            <div class="box-body">
+                <div class="note blue">
+                    <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+                    <span>Kode OTP telah dikirim ke akun Telegram kamu.</span>
+                </div>
+                <div class="f">
+                    <label>Kode OTP</label>
+                    <div class="ib"><input type="text" id="otpCode" placeholder="12345" maxlength="10" autocomplete="one-time-code" inputmode="numeric"></div>
+                </div>
+                <div class="note red hide" id="errOtp">
+                    <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+                    <span id="errOtpMsg"></span>
+                </div>
+                <button class="btn btn-blue" id="btnVerify">
+                    <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                    Verifikasi
+                </button>
+                <button class="btn btn-ghost" id="btnBack">
+                    <svg viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+                    Kembali
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="panel" id="pResult">
+        <div class="res-box">
+            <div class="res-top">
+                <div class="res-top-ico">
+                    <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                </div>
+                <div class="res-top-lbl">Session berhasil dibuat</div>
+                <div class="res-top-meta" id="resMeta"></div>
+            </div>
+            <div class="res-body">
+                <div class="res-info">
+                    <div class="res-row">
+                        <div class="res-row-lbl">Nomor</div>
+                        <div class="res-row-val" id="resPhone">—</div>
+                    </div>
+                    <div class="res-row">
+                        <div class="res-row-lbl">Dibuat</div>
+                        <div class="res-row-val" id="resDate">—</div>
+                    </div>
+                </div>
+                <div class="ses-out" id="sesOut"></div>
+                <div class="btn-pair">
+                    <button class="bsm bsm-blue" id="btnCopy">
+                        <svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
+                        Salin Session
+                    </button>
+                    <button class="bsm bsm-green" id="btnDl">
+                        <svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
+                        Unduh .session
+                    </button>
+                </div>
+                <button class="btn btn-ghost" id="btnNew">
+                    <svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+                    Buat Session Baru
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div id="histWrap">
+        <div class="box">
+            <div class="box-top">
+                <div class="box-top-ico">
+                    <svg viewBox="0 0 24 24"><path d="M13 3a9 9 0 0 0-9 9H1l3.89 3.89.07.14L9 12H6c0-3.87 3.13-7 7-7s7 3.13 7 7-3.13 7-7 7c-1.93 0-3.68-.79-4.94-2.06l-1.42 1.42A8.954 8.954 0 0 0 13 21a9 9 0 0 0 0-18zm-1 5v5l4.28 2.54.72-1.21-3.5-2.08V8H12z"/></svg>
+                </div>
+                <div class="box-top-lbl">Riwayat Session</div>
+            </div>
+            <div class="box-body">
+                <div class="hist-hdr">
+                    <div class="hist-lbl">Tersimpan di browser</div>
+                    <button class="btn-clr" id="btnClrAll">
+                        <svg viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>
+                        Hapus semua
+                    </button>
+                </div>
+                <div class="hist-list" id="histList"></div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<footer class="foot">
+    &copy; <span id="yr"></span> TGSession &mdash; All Rights Reserved.
+</footer>
+
+<div class="toast" id="toast">
+    <svg viewBox="0 0 24 24" id="toastIco"><path d=""/></svg>
+    <span class="tt" id="toastTxt"></span>
+</div>
+
+<script>
+    const SKEY = 'tgsess_v1';
+
+    const getSess  = () => { try { return JSON.parse(localStorage.getItem(SKEY) || '[]'); } catch { return []; } };
+    const setSess  = (a) => localStorage.setItem(SKEY, JSON.stringify(a));
+    const pushSess = (e) => { const a = getSess(); a.unshift(e); setSess(a); };
+    const dropSess = (i) => { const a = getSess(); a.splice(i, 1); setSess(a); };
+    const wipeAll  = ()  => localStorage.removeItem(SKEY);
+
+    const esc = (s) => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]));
+
+    function toast(msg, type = 'ok') {
+        const el  = document.getElementById('toast');
+        const ico = document.getElementById('toastIco');
+        document.getElementById('toastTxt').textContent = msg;
+        el.className  = `toast ${type} on`;
+        ico.innerHTML = type === 'ok'
+            ? '<path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>'
+            : '<path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>';
+        clearTimeout(el._t);
+        el._t = setTimeout(() => el.classList.remove('on'), 2800);
+    }
+
+    function setStep(n) {
+        [1, 2, 3].forEach(i => {
+            const el = document.getElementById('s' + i);
+            el.className = 'ps' + (i < n ? ' ok' : i === n ? ' on' : '');
+            el.querySelector('.pd').textContent = i < n ? '✓' : i;
+        });
+    }
+
+    function showPanel(id) {
+        ['pCred', 'pOtp', 'pResult'].forEach(p => {
+            const el = document.getElementById(p);
+            el.classList.toggle('on', p === id);
+        });
+    }
+
+    function resetOtpPanel() {
+        document.getElementById('otpCode').value = '';
+        document.getElementById('errOtp').classList.add('hide');
+        document.getElementById('errOtpMsg').textContent = '';
+    }
+
+    function setLoading(btn, on, label, path) {
+        btn.disabled  = on;
+        btn.innerHTML = on
+            ? '<div class="spin"></div> Memproses...'
+            : `<svg viewBox="0 0 24 24" style="width:13px;height:13px;fill:currentColor"><path d="${path}"/></svg> ${label}`;
+    }
+
+    function dlFile(content, name) {
+        const a    = document.createElement('a');
+        a.href     = URL.createObjectURL(new Blob([content], { type: 'text/plain' }));
+        a.download = name;
+        a.click();
+        URL.revokeObjectURL(a.href);
+    }
+
+    function renderHist() {
+        const list = document.getElementById('histList');
+        const arr  = getSess();
+
+        if (!arr.length) {
+            list.innerHTML = `
+                <div class="hist-empty">
+                    <svg viewBox="0 0 24 24"><path d="M20 6h-2.18c.07-.44.18-.88.18-1.35C18 2.54 15.6 0 12.65 0c-1.6 0-3.03.73-4 1.88L8 3l-.65-.88C6.38.73 4.95 0 3.35 0 .4 0-2 2.54-2 4.65c0 .47.11.91.18 1.35H-2v2h24V6zM4 8v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8H4z"/></svg>
+                    Belum ada session tersimpan
+                </div>`;
+            return;
+        }
+
+        list.innerHTML = arr.map((s, i) => `
+            <div class="hi">
+                <div class="hi-r1">
+                    <div class="hi-phone">
+                        <svg viewBox="0 0 24 24"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.248l-2.04 9.613c-.15.673-.543.838-1.097.521l-3.04-2.24-1.468 1.412c-.162.162-.298.298-.612.298l.218-3.094 5.63-5.087c.245-.218-.053-.338-.38-.12L7.565 14.63l-2.99-.934c-.65-.203-.663-.65.136-.961l11.67-4.502c.54-.198 1.014.12.781.015z"/></svg>
+                        ${esc(s.phone)}
+                    </div>
+                    <div class="hi-date">${esc(s.date)}</div>
+                </div>
+                <div class="hi-prev">${esc(s.session)}</div>
+                <div class="hi-acts">
+                    <button class="hb hb-c" onclick="hCopy(${i})">
+                        <svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
+                        Salin
+                    </button>
+                    <button class="hb hb-d" onclick="hDl(${i})">
+                        <svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
+                        Unduh
+                    </button>
+                    <button class="hb hb-x" onclick="hDel(${i})">
+                        <svg viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>
+                        Hapus
+                    </button>
+                </div>
+            </div>`).join('');
+    }
+
+    window.hCopy = (i) => {
+        const s = getSess()[i];
+        if (s) navigator.clipboard.writeText(s.session).then(() => toast('Session disalin!'));
+    };
+
+    window.hDl = (i) => {
+        const s = getSess()[i];
+        if (s) { dlFile(s.session, `session_${s.phone.replace(/\+/g, '')}.session`); toast('File diunduh!'); }
+    };
+
+    window.hDel = (i) => {
+        if (!confirm('Hapus session ini?')) return;
+        dropSess(i);
+        renderHist();
+        toast('Session dihapus.', 'err');
+    };
+
+    let sid = null, sphone = null, sSess = null;
+
+    document.getElementById('btnSend').addEventListener('click', async () => {
+        const apiId   = document.getElementById('apiId').value.trim();
+        const apiHash = document.getElementById('apiHash').value.trim();
+        const phone   = document.getElementById('phone').value.trim();
+        const btn     = document.getElementById('btnSend');
+        const errEl   = document.getElementById('errCred');
+        const errMsg  = document.getElementById('errCredMsg');
+
+        errEl.classList.add('hide');
+
+        if (!apiId || !apiHash || !phone) {
+            errMsg.textContent = 'Semua field wajib diisi.';
+            errEl.classList.remove('hide');
+            return;
+        }
+
+        setLoading(btn, true);
+
+        try {
+            const r    = await fetch('/api/start', {
+                method:  'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body:    JSON.stringify({ apiId, apiHash, phone }),
+            });
+            const data = await r.json();
+
+            if (data.success) {
+                sid    = data.sessionId;
+                sphone = phone;
+                resetOtpPanel();
+                setStep(2);
+                showPanel('pOtp');
+            } else {
+                errMsg.textContent = data.message;
+                errEl.classList.remove('hide');
+            }
+        } catch {
+            errMsg.textContent = 'Gagal terhubung ke server.';
+            errEl.classList.remove('hide');
+        }
+
+        setLoading(btn, false, 'Kirim Kode OTP', 'M2.01 21L23 12 2.01 3 2 10l15 2-15 2z');
+    });
+
+    document.getElementById('btnVerify').addEventListener('click', async () => {
+        const code   = document.getElementById('otpCode').value.replace(/\s+/g, '').trim();
+        const btn    = document.getElementById('btnVerify');
+        const errEl  = document.getElementById('errOtp');
+        const errMsg = document.getElementById('errOtpMsg');
+
+        errEl.classList.add('hide');
+
+        if (!code) {
+            errMsg.textContent = 'Masukkan kode OTP.';
+            errEl.classList.remove('hide');
+            return;
+        }
+
+        setLoading(btn, true);
+
+        try {
+            const r    = await fetch('/api/verify', {
+                method:  'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body:    JSON.stringify({ sessionId: sid, code }),
+            });
+            const data = await r.json();
+
+            if (data.success) {
+                sSess = data.session;
+
+                const now   = new Date();
+                const date  = now.toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' });
+                const time  = now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+                const label = date + ', ' + time;
+
+                const entry = { phone: sphone, session: data.session, date: label };
+                pushSess(entry);
+                renderHist();
+
+                document.getElementById('sesOut').textContent   = data.session;
+                document.getElementById('resPhone').textContent = sphone;
+                document.getElementById('resDate').textContent  = label;
+                document.getElementById('resMeta').textContent  = label;
+
+                setStep(3);
+                showPanel('pResult');
+
+            } else {
+                errMsg.textContent = data.message;
+                errEl.classList.remove('hide');
+            }
+        } catch {
+            errMsg.textContent = 'Gagal terhubung ke server.';
+            errEl.classList.remove('hide');
+        }
+
+        setLoading(btn, false, 'Verifikasi', 'M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z');
+    });
+
+    document.getElementById('btnBack').addEventListener('click', () => {
+        setStep(1);
+        showPanel('pCred');
+        resetOtpPanel();
+        sid = null;
+    });
+
+    document.getElementById('btnNew').addEventListener('click', () => {
+        setStep(1);
+        showPanel('pCred');
+        resetOtpPanel();
+        sid = null; sphone = null; sSess = null;
+    });
+
+    document.getElementById('btnCopy').addEventListener('click', () => {
+        if (!sSess) return;
+        navigator.clipboard.writeText(sSess).then(() => toast('Session disalin!'));
+    });
+
+    document.getElementById('btnDl').addEventListener('click', () => {
+        if (!sSess) return;
+        dlFile(sSess, `session_${(sphone || 'tg').replace(/\+/g, '')}.session`);
+        toast('File diunduh!');
+    });
+
+    document.getElementById('btnClrAll').addEventListener('click', () => {
+        if (!confirm('Hapus semua riwayat session?')) return;
+        wipeAll();
+        renderHist();
+        toast('Semua session dihapus.', 'err');
+    });
+
+    document.getElementById('otpCode').addEventListener('keydown', e => { if (e.key === 'Enter') document.getElementById('btnVerify').click(); });
+    document.getElementById('phone').addEventListener('keydown',   e => { if (e.key === 'Enter') document.getElementById('btnSend').click(); });
+
+    document.getElementById('yr').textContent = new Date().getFullYear();
+
+    setStep(1);
+    showPanel('pCred');
+    renderHist();
+</script>
+</body>
+</html>
